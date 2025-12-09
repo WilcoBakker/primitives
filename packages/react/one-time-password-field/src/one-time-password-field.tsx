@@ -12,7 +12,6 @@ import type { Scope } from '@radix-ui/react-context';
 import { createContextScope } from '@radix-ui/react-context';
 import { useDirection } from '@radix-ui/react-direction';
 import { clamp } from '@radix-ui/number';
-import { useEffectEvent } from '@radix-ui/react-use-effect-event';
 
 type InputValidationType = 'alpha' | 'numeric' | 'alphanumeric' | 'none';
 
@@ -266,7 +265,7 @@ const OneTimePasswordField = React.forwardRef<HTMLDivElement, OneTimePasswordFie
     });
 
     // Update function *specifically* for event handlers.
-    const dispatch = useEffectEvent<Dispatcher>((action) => {
+    const dispatch = React.useCallback<Dispatcher>((action) => {
       switch (action.type) {
         case 'SET_CHAR': {
           const { index, char } = action;
@@ -361,7 +360,7 @@ const OneTimePasswordField = React.forwardRef<HTMLDivElement, OneTimePasswordFie
           return;
         }
       }
-    });
+    }, [ collection, sanitizeValue, setValue, validation, value, ]);
 
     // re-validate when the validation type changes
     const validationTypeRef = React.useRef(validation);
